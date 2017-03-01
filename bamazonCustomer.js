@@ -123,6 +123,11 @@ function furtherAction() {
 				break;
 
 			case "Exit?":
+				console.log(`
+-------------
+Thank you for shopping at Bamazon!
+-------------
+`)
 				process.exit();
 		}
 	})
