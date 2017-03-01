@@ -129,6 +129,11 @@ Thank you for shopping at Bamazon!
 -------------
 `)
 				process.exit();
+				break;
+
+			default:
+				console.log("It's a beautiful day!");
+				break;
 		}
 	})
 }
