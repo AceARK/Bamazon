@@ -134,31 +134,37 @@ function addToInventory() {
 
 function addNewProduct() {
 	connection.query("SELECT department_name FROM products GROUP BY department_name HAVING COUNT(*) >= 1", function(err, data) {
-		var i=0;
 		var departmentNames = data.map(item => item.department_name);
-		console.log(departmentNames);
-		process.exit();
-	})
-	// inquirer.prompt([
-	// 	{
-	// 		name: "name",
-	// 		message: "Enter the name of the product:"
-	// 	},
-	// 	{
-	// 		name: "price",
-	// 		message: "Enter it's selling price:"
-	// 	},
-	// 	{
-	// 		type: "list",
-	// 		name: "department",
-	// 		message: "Choose the appropriate department it belongs to:",
-	// 		choices: []
-	// 	},
-	// 	{
-	// 		name: "quantity",
-	// 		message: "Enter how much of it to stock in inventory:"
-	// 	}
-	// ])
+		inquirer.prompt([
+			{
+				name: "name",
+				message: "Enter the name of the product:"
+			},
+			{
+				name: "price",
+				message: "Enter it's selling price:"
+			},
+			{
+				type: "list",
+				name: "department",
+				message: "Choose the appropriate department it belongs to:",
+				choices: departmentNames
+			},
+			{
+				name: "quantity",
+				message: "Enter how much of it to stock in inventory:"
+			}
+		]).then(function(product) {
+			connection.query("INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ?", [product.name, product.department, product.price, product.quantity], function(err, data) {
+				if(err) {
+					console.log(err);
+				}else {
+					console.log("New product added to Bamazon!");
+				}
+				getManagerAction();
+			});
+		});
+	});
 }
 
 
