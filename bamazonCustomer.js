@@ -1,13 +1,4 @@
-// 1. Display all the items available on Bamazon - IDs, names, prices - select id, name, price from products 
-
-// 2.  Then prompt which product to buy
-// 2 . How much of it to buy
-
-// Check if quantity in db > quantity requested - select quantity from products where item_id = id selected, and compare
-// If not, "Insufficient" message. Return to prompt 2.
-// If yes, db quantity - quantity requested -> update to db - update products set quantity = calculated where item_id = id chosen
-// Calculate total and display -> price of item * quantity requested - select price from products where price = 
-
+// Require dependencies
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 require('console.table');
@@ -24,9 +15,11 @@ var connection = mysql.createConnection({
 // Connect to Bamazon db
 connection.connect(function(err) {
 	if(err) throw err;
+	// Start program
 	start();
 });
 
+// Start function to display welcome message and begin
 function start() {
 	console.log(`
 ______________________________________________
@@ -36,21 +29,25 @@ ______________________________________________
 We make up in service, what we lack in name...
 ______________________________________________
 	`);
+	// Display products listed in db
 	displayProducts();
 }
 
+// Function to display products listed in table
 function displayProducts() {
 	connection.query("SELECT item_id, product_name, price FROM products", function(err, data) {
 		if(err) {
 			console.log(err);
 		}else {
 			console.log("");
+			// Log data in tabular format
 			console.table(data);
 			getUserChoice();
 		}
 	})
 }
 
+// Function to let user choose item and quantity to buy
 function getUserChoice() {
 	inquirer.prompt([
 		{
@@ -110,6 +107,7 @@ Order cannot go through.
 	})
 }
 
+// Function to get further action from user
 function furtherAction() {
 	inquirer.prompt([
 		{
@@ -120,7 +118,7 @@ function furtherAction() {
 		}
 	]).then(function(action) {
 		switch(action.next) {
-			case "Continue shopping?":
+			case "continue shopping?":
 				displayProducts();
 				break;
 
