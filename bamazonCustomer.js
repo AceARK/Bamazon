@@ -29,14 +29,12 @@ connection.connect(function(err) {
 
 function start() {
 	console.log(`
-___________________________________________________________
+______________________________________________
 
-	  * * * Welcome to Bamazon * * *
-	 --------------------------------
-Where we make up in service, what's lacking in the name ...
-___________________________________________________________
-
-
+     * * * Welcome to Bamazon * * *
+   ----------------------------------
+We make up in service, what we lack in name...
+______________________________________________
 	`);
 	displayProducts();
 }
@@ -46,6 +44,7 @@ function displayProducts() {
 		if(err) {
 			console.log(err);
 		}else {
+			console.log("");
 			console.table(data);
 			getUserChoice();
 		}
@@ -56,13 +55,79 @@ function getUserChoice() {
 	inquirer.prompt([
 		{
 			name: "id",
-			message: "What would you like to purchase? (Enter the product_id from the displayed list)" 
+			message: "Enter the ID of the product you want to purchase:" 
 		},
 		{
 			name: "quantity",
-			message: "How many of that item would you like to purchase?"
+			message: "Enter the quantity you want to purchase:"
 		}
 	]).then(function(choice) {
-		console.log("You want to buy ", choice.quantity, " of ", choice.id);
+		// If (select quantity from products where id = choice.id) quantity in db > choice.quantity => update in db (update products set quantity = dbquantity - userquantity where id = user.id)
+		connection.query("SELECT stock_quantity FROM products WHERE item_id = ?", [choice.id], function(err, data) {
+			if(err) {
+				console.log(err);
+			}else {
+				// Quantity of product in stock
+				var stock_quantity = data[0].stock_quantity;
+				// Checking if requested amount is in stock
+				if(stock_quantity > choice.quantity) {
+					var updatedQuantity = stock_quantity - choice.quantity;
+					// Updating stock_quantity after purchase to db
+					connection.query("UPDATE products SET stock_quantity = ? WHERE item_id = ?", [updatedQuantity, choice.id], function(err, data) {
+						console.log(`
+-------------
+Order placed successfully.
+-------------`)
+						// console.log("Your order has been successfully placed.");
+						// Getting price of requested product from db
+						connection.query("SELECT price FROM products WHERE item_id = ?", [choice.id], function(err, data) {
+							if(err) {
+								console.log(err);
+							}else  {
+								// Calculating order total from price of item and quantity requested
+								var priceOfItem = data[0].price;
+								var totalCost = priceOfItem * choice.quantity;
+								console.log(`Order total: $${totalCost.toFixed(2)}
+-------------
+`);
+							}
+							// Ask if user wants to continue shopping
+							furtherAction();
+						});
+					});
+
+				}else {
+					console.log(`
+Insufficient quantity! 
+-------------
+Order cannot go through.
+					`);
+					// Ask if user wants to continue shopping
+					furtherAction();
+				}
+			}
+		});
 	})
 }
+
+function furtherAction() {
+	inquirer.prompt([
+		{
+			type: "list",
+			name: "next",
+			message: "Would you like to:",
+			choices: ["Continue shopping?", "Exit?"] 
+		}
+	]).then(function(action) {
+		switch(action.next) {
+			case "Continue shopping?":
+				displayProducts();
+				break;
+
+			case "Exit?":
+				process.exit();
+		}
+	})
+}
+
+
