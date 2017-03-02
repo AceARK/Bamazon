@@ -38,6 +38,7 @@ Welcome Manager
 
 // Function to get manager's choice of action and route to appropriate functions
 function getManagerAction() {
+	// Get command from user
 	inquirer.prompt([
 		{	
 			type: "list",
@@ -46,6 +47,7 @@ function getManagerAction() {
 			choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product", "Exit"] 
 		}
 	]).then(function(manager) {
+		// Based on user choice, call appropriate function
 		switch(manager.choice) {
 			case "View Products for Sale":
 				displayProducts();
@@ -68,6 +70,7 @@ function getManagerAction() {
 				break;
 
 			default: 
+				// Random message since this won't be executed anyway
 				console.log("It's a beautiful day today!");
 				break;
 		}
@@ -76,6 +79,7 @@ function getManagerAction() {
 
 // Function to display products for sale
 function displayProducts() {
+	// Select query to display all items within table in database
 	connection.query("SELECT item_id, product_name, price, stock_quantity FROM products", function(err, data) {
 		if(err) {
 			console.log(err);
@@ -83,6 +87,7 @@ function displayProducts() {
 			console.log("");
 			// Log data in tabular format
 			console.table(data);
+			// Display menu
 			getManagerAction();
 		}
 	});
@@ -90,18 +95,22 @@ function displayProducts() {
 
 // Function to display products with stock_quantity < 5
 function displayLowInventory() {
+	// Select from table in database to display item list of products with stock quantity < 5
 	connection.query("SELECT item_id, product_name, price, stock_quantity FROM products WHERE stock_quantity < 5", function(err, data) {
 		if(err) {
 			console.log(err);
 		}else {
+			// Log data received in tabular format
 			console.table(data);
 		}
+		// Display menu
 		getManagerAction();
 	});
 }
 
 // Function to add to inventory
 function addToInventory() {
+	// Get ID and quantity to add of item to be updated
 	inquirer.prompt([
 		{
 			name: "id",
@@ -116,14 +125,19 @@ function addToInventory() {
 			if(err) {
 				console.log(err);
 			}else {
+				// Current stock quantity retrieved from table
 				var currentQuantity = parseFloat(data[0].stock_quantity);
+				// Adding quantity specified to get new quantity to update in table
 				var quantityToBeUpdated = currentQuantity + parseFloat(input.quantity);
+				// Update query to update new quantity to table
 				connection.query("UPDATE products SET stock_quantity = ? WHERE item_id = ?", [quantityToBeUpdated, input.id], function(err, data) {
 					if(err) {
 						console.log(err);
 					}else {
+						// Notifying user
 						console.log("Stock quantity added to inventory");
 					}
+					// Display menu options again
 					getManagerAction();
 				});
 			}
@@ -131,18 +145,16 @@ function addToInventory() {
 	});
 }
 
-
+// Function to handle adding of new products
 function addNewProduct() {
+	// Getting a list of all the department names on Bamazon
 	connection.query("SELECT department_name FROM products GROUP BY department_name HAVING COUNT(*) >= 1", function(err, data) {
 		var departmentNames = data.map(item => item.department_name);
+		// Ask details of product to be added
 		inquirer.prompt([
 			{
 				name: "name",
 				message: "Enter the name of the product:"
-			},
-			{
-				name: "price",
-				message: "Enter it's selling price:"
 			},
 			{
 				type: "list",
@@ -151,16 +163,28 @@ function addNewProduct() {
 				choices: departmentNames
 			},
 			{
+				name: "price",
+				message: "Enter it's selling price:"
+			},
+			{
 				name: "quantity",
 				message: "Enter how much of it to stock in inventory:"
 			}
 		]).then(function(product) {
-			connection.query("INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ?", [product.name, product.department, product.price, product.quantity], function(err, data) {
+			// Inserting data collected from user to products table
+			connection.query("INSERT INTO products SET ?", {
+				product_name: product.name,
+				department_name: product.department,
+				price: product.price,
+				stock_quantity: product.quantity
+			}, function(err, data) {
 				if(err) {
 					console.log(err);
 				}else {
+					// Notify user
 					console.log("New product added to Bamazon!");
 				}
+				// Display menu again
 				getManagerAction();
 			});
 		});
