@@ -87,6 +87,15 @@ Order placed successfully.
 								console.log(`Order total: $${totalCost.toFixed(2)}
 -------------
 `);
+								//////// Product Sales (Final level) Pseudocode ////////
+								// Get product_sales and dept_name using id -> Select product_sales, department_name from products where id = choice.id
+								// var db_product_sales = data[0].product_sales
+								// var db_dept_name = data[0].department_name
+								// Update new product_Sales to products -> Update products set product_sales = db_product_sales + totalCost.
+								// Get department_sales from departments using dept_name -> Select department_sales from departments where department_name = db_dept_name
+								// var db_dept_sales = data[0].department_sales
+								// Update new dept_sales to departments -> Update departments set department_sales = db_dept_sales + totalCost.
+
 							}
 							// Ask if user wants to continue shopping
 							furtherAction();
