@@ -60,7 +60,7 @@ function getUserChoice() {
 		}
 	]).then(function(choice) {
 		// If (select quantity from products where id = choice.id) quantity in db > choice.quantity => update in db (update products set quantity = dbquantity - userquantity where id = user.id)
-		connection.query("SELECT stock_quantity FROM products WHERE item_id = ?", [choice.id], function(err, data) {
+		connection.query("SELECT stock_quantity, price, product_sales, department_name FROM products WHERE item_id = ?", [choice.id], function(err, data) {
 			if(err) {
 				console.log(err);
 			}else {
@@ -69,49 +69,50 @@ function getUserChoice() {
 				// Checking if requested amount is in stock
 				if(stock_quantity > choice.quantity) {
 					var updatedQuantity = stock_quantity - choice.quantity;
+
+					// Calculating order total from price of item and quantity requested
+					var priceOfItem = data[0].price;
+					var totalCost = priceOfItem * choice.quantity;
+
+					// Storing department_name for use in updating departments
+					var department_name = data[0].department_name;
+					
+					// Check if product_sales is null, then set to 0.00 else use product_sales from products
+					if(data[0].product_sales !== null) {
+						var product_sales = data[0].product_sales;
+					}else {
+						var product_sales = 0.00;
+					}
+					// Calculating new product_sales using totalCost
+					product_sales += totalCost;
+
 					// Updating stock_quantity after purchase to db
-					connection.query("UPDATE products SET stock_quantity = ? WHERE item_id = ?", [updatedQuantity, choice.id], function(err, data) {
+					connection.query("UPDATE products SET stock_quantity = ?, product_sales = ? WHERE item_id = ?", [updatedQuantity, product_sales, choice.id], function(err, data) {
 						console.log(`
 -------------
 Order placed successfully.
--------------`)
-						// console.log("Your order has been successfully placed.");
-						// Getting price of requested product from db
-						connection.query("SELECT price FROM products WHERE item_id = ?", [choice.id], function(err, data) {
+-------------`);
+						console.log(`Order total: $${totalCost.toFixed(2)}
+-------------
+`);						
+
+						// Updating new department_sales to departments
+						connection.query("SELECT total_sales FROM departments WHERE department_name = ?", [department_name], function(err, data) {
 							if(err) {
 								console.log(err);
-							}else  {
-								// Calculating order total from price of item and quantity requested
-								var priceOfItem = data[0].price;
-								var totalCost = priceOfItem * choice.quantity;
-								console.log(`Order total: $${totalCost.toFixed(2)}
--------------
-`);
-								//////// Product Sales (Final level) Pseudocode ////////
-								// Get product_sales and dept_name using id -> Select product_sales, department_name from products where id = choice.id
-								// connection.query("SELECT product_sales, department_name FROM products WHERE item_id = ?", [choice.id], function(err, data) {
-								// 	if(err) {
-								// 		console.log(err);
-								// 	}else {
-								// 		if(data[0].product_sales !== null) {
-								// 			var product_sales = data[0].product_sales;
-								// 		}else {
-								// 			var product_sales = 0.00;
-								// 		}
-								// 		var department_name = data[0].department_name;
-								// 		console.log(data[0].product_sales + ", " + product_sales + ", " + data[0].department_name + ", " + department_name);
-								// 	}
-								// });
-								// var db_product_sales = data[0].product_sales
-								// var db_dept_name = data[0].department_name
-								// Update new product_Sales to products -> Update products set product_sales = db_product_sales + totalCost.
-								// Get department_sales from departments using dept_name -> Select department_sales from departments where department_name = db_dept_name
-								// var db_dept_sales = data[0].department_sales
-								// Update new dept_sales to departments -> Update departments set department_sales = db_dept_sales + totalCost.
-
+							}else {
+								var department_sales = data[0].total_sales;
+								// Calculate new total_sales using totalCost of user's purchase
+								department_sales += totalCost;
+								// Update new total_sales into departments
+								connection.query("UPDATE departments SET total_sales = ? WHERE department_name = ?", [department_sales, department_name], function(err, data) {
+									if(err) {
+										console.log(err);
+									}
+									// Ask if user wants to continue shopping
+									furtherAction();
+								});
 							}
-							// Ask if user wants to continue shopping
-							furtherAction();
 						});
 					});
 
@@ -136,15 +137,15 @@ function furtherAction() {
 			type: "list",
 			name: "next",
 			message: "Would you like to:",
-			choices: ["continue shopping?", "Exit?"] 
+			choices: ["Continue shopping", "Exit"] 
 		}
 	]).then(function(action) {
 		switch(action.next) {
-			case "continue shopping?":
+			case "Continue shopping":
 				displayProducts();
 				break;
 
-			case "Exit?":
+			case "Exit":
 				console.log(`
 -------------
 Thank you for shopping at Bamazon!
@@ -154,7 +155,7 @@ Thank you for shopping at Bamazon!
 				break;
 
 			default:
-				console.log("It's a beautiful day!");
+				console.log("... Bamazon ... where we make up in service, what lacks in name ...");
 				break;
 		}
 	})

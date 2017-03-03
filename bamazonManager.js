@@ -71,7 +71,7 @@ function getManagerAction() {
 
 			default: 
 				// Random message since this won't be executed anyway
-				console.log("It's a beautiful day today!");
+				console.log("... Bamazon ... we make up in service, what we lack in name ...");
 				break;
 		}
 	});
