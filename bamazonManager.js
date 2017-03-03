@@ -182,7 +182,9 @@ function addNewProduct() {
 					console.log(err);
 				}else {
 					// Notify user
-					console.log("New product added to Bamazon!");
+					console.log(`
+New product added to Bamazon!
+					`);
 				}
 				// Display menu again
 				getManagerAction();

@@ -115,7 +115,9 @@ function createNewDepartment() {
 			if(err) {
 				console.log(err);
 			}else {
-				console.log("Department added");
+				console.log(`
+Department added
+				`);
 			}
 			getSupervisorAction();
 		});
