@@ -89,6 +89,19 @@ Order placed successfully.
 `);
 								//////// Product Sales (Final level) Pseudocode ////////
 								// Get product_sales and dept_name using id -> Select product_sales, department_name from products where id = choice.id
+								// connection.query("SELECT product_sales, department_name FROM products WHERE item_id = ?", [choice.id], function(err, data) {
+								// 	if(err) {
+								// 		console.log(err);
+								// 	}else {
+								// 		if(data[0].product_sales !== null) {
+								// 			var product_sales = data[0].product_sales;
+								// 		}else {
+								// 			var product_sales = 0.00;
+								// 		}
+								// 		var department_name = data[0].department_name;
+								// 		console.log(data[0].product_sales + ", " + product_sales + ", " + data[0].department_name + ", " + department_name);
+								// 	}
+								// });
 								// var db_product_sales = data[0].product_sales
 								// var db_dept_name = data[0].department_name
 								// Update new product_Sales to products -> Update products set product_sales = db_product_sales + totalCost.
@@ -123,7 +136,7 @@ function furtherAction() {
 			type: "list",
 			name: "next",
 			message: "Would you like to:",
-			choices: ["Continue shopping?", "Exit?"] 
+			choices: ["continue shopping?", "Exit?"] 
 		}
 	]).then(function(action) {
 		switch(action.next) {
