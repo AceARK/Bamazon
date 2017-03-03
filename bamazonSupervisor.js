@@ -91,16 +91,23 @@ function createNewDepartment() {
 	inquirer.prompt([
 		{
 			name: "name",
-			message: "Enter the name of the department to be added:" 
+			message: "Enter the name of the department to be added:",
+			validate: function(input) {
+				if(input !== "") {
+					return true;
+				}else {
+					return "Required: Department name cannot be empty"
+				}
+			}
 		},
 		{
 			name: "overHeadCosts",
 			message: "Enter the overhead cost for this department (format: 39.50):",
 			// Validate if entered input is in proper price format
 			validate: function(input) {
-				// Using regex pattern for matching
+				// Using regex pattern for matching cost format
 				var check = input.match(/^-?\d*(\.\d{2})?$/);
-				if (check) {
+				if (check && input !== "") {
 					return true;
 				} else {
 					return 'Incorrect overhead cost format - See format above';
@@ -112,9 +119,9 @@ function createNewDepartment() {
 			message: "Enter total sales from this department (Optional - can be left blank. Format: 25.67):",
 			// Validate if entered input is in proper price format
 			validate: function(input) {
-				// Using regex pattern for matching
+				// Using regex pattern for matching price
 				var check = input.match(/^-?\d*(\.\d{2})?$/);
-				if (check || input === "") {
+				if (check && input === "") {
 					return true;
 				} else {
 					return 'Incorrect sales price format - See format above';
@@ -136,8 +143,9 @@ function createNewDepartment() {
 				console.log(err);
 			}else {
 				console.log(`
+-------------------------
 Department '${department.name}' added to Bamazon.
-				`);
+-------------------------`);
 			}
 			getSupervisorAction();
 		});

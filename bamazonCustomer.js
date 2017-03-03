@@ -52,10 +52,10 @@ function getUserChoice() {
 	inquirer.prompt([
 		{
 			name: "id",
-			message: "Enter the ID of the product you want to purchase:" 
+			message: "Enter the ID of the product you want to purchase:",
 			// Validate if entered input is a number and write appropriate error message
 			validate: function(input) {
-				if (isNaN(input)) {
+				if (isNaN(input) || input === "") {
 					return 'Enter the ID (a number) of the product';
 				} else {
 					return true;
@@ -67,7 +67,7 @@ function getUserChoice() {
 			message: "Enter the quantity you want to purchase:",
 			// Validate if entered input is a number and write appropriate error message
 			validate: function(input) {
-				if (isNaN(input)) {
+				if (isNaN(input) || input === "") {
 					return 'Enter a number for quantity';
 				} else {
 					return true;
@@ -104,12 +104,15 @@ function getUserChoice() {
 
 					// Updating stock_quantity after purchase to db
 					connection.query("UPDATE products SET stock_quantity = ?, product_sales = ? WHERE item_id = ?", [updatedQuantity, product_sales, choice.id], function(err, data) {
+						var orderID = Math.random().toString(36).slice(2);
 						console.log(`
--------------
+--------------------------
 Order placed successfully.
--------------`);
+--------------------------
+Your order ID is: ${orderID}
+-------------------`);
 						console.log(`Order total: $${totalCost.toFixed(2)}
--------------
+-------------------
 `);						
 
 						// Updating new department_sales to departments

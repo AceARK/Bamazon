@@ -117,7 +117,7 @@ function addToInventory() {
 			message: "ID of item to add:",
 			// Validate if entered input is a number and write appropriate error message
 			validate: function(input) {
-				if (isNaN(input)) {
+				if (isNaN(input) || input === "") {
 					return 'Enter the ID (a number) of the item to add';
 				} else {
 					return true;
@@ -129,7 +129,7 @@ function addToInventory() {
 			message: "How much would you like to add?",
 			// Validate if entered input is a number and write appropriate error message
 			validate: function(input) {
-				if (isNaN(input)) {
+				if (isNaN(input) || input === "") {
 					return 'Enter a number for quantity';
 				} else {
 					return true;
@@ -170,7 +170,15 @@ function addNewProduct() {
 		inquirer.prompt([
 			{
 				name: "name",
-				message: "Enter the name of the product:"
+				message: "Enter the name of the product:",
+				// Validate if entered input is in proper price format
+				validate: function(input) {
+					if (input !== "") {
+						return true;
+					} else {
+						return "Required: Product name cannot be empty";
+					}
+				}
 			},
 			{
 				type: "list",
@@ -183,9 +191,9 @@ function addNewProduct() {
 				message: "Enter it's selling price (example: 10.79, 0.50, 250):",
 				// Validate if entered input is in proper price format
 				validate: function(input) {
-					// Using regex pattern for matching
+					// Using regex pattern for matching price
 					var check = input.match(/^-?\d*(\.\d{2})?$/);
-					if (check) {
+					if (check && input!== "") {
 						return true;
 					} else {
 						return 'Incorrect price format - See examples above';
@@ -197,7 +205,7 @@ function addNewProduct() {
 				message: "Enter how much of it to stock in inventory:",
 				// Validate if entered input is a number 
 				validate: function(input) {
-					if (isNaN(input)) {
+					if (isNaN(input) || input === "") {
 						return 'Enter a number for quantity';
 					} else {
 						return true;
@@ -217,8 +225,9 @@ function addNewProduct() {
 				}else {
 					// Notify user
 					console.log(`
+-------------------------
 New product '${product.name}' added to Bamazon!
-					`);
+-------------------------`);
 				}
 				// Display menu again
 				getManagerAction();
