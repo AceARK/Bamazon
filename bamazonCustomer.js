@@ -26,7 +26,7 @@ ______________________________________________
 
      * * * Welcome to Bamazon * * *
    ----------------------------------
-We make up in service, what we lack in name...
+We make up in service, what's lacking in name...
 ______________________________________________
 	`);
 	// Display products listed in db
@@ -155,7 +155,7 @@ Thank you for shopping at Bamazon!
 				break;
 
 			default:
-				console.log("... Bamazon ... where we make up in service, what lacks in name ...");
+				console.log("Bamazon ... where we make up in service, what's lacking in name ...");
 				break;
 		}
 	})

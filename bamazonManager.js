@@ -71,7 +71,7 @@ function getManagerAction() {
 
 			default: 
 				// Random message since this won't be executed anyway
-				console.log("... Bamazon ... we make up in service, what we lack in name ...");
+				console.log("Bamazon ... where we make up in service, what's lacking in name ...");
 				break;
 		}
 	});
