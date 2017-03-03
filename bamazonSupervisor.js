@@ -95,14 +95,34 @@ function createNewDepartment() {
 		},
 		{
 			name: "overHeadCosts",
-			message: "Enter the overhead cost for this department:"
+			message: "Enter the overhead cost for this department (format: 39.50):",
+			// Validate if entered input is in proper price format
+			validate: function(input) {
+				// Using regex pattern for matching
+				var check = input.match(/^-?\d*(\.\d{2})?$/);
+				if (check) {
+					return true;
+				} else {
+					return 'Incorrect overhead cost format - See format above';
+				}
+			}
 		},
 		{
 			name: "totalSales",
-			message: "Enter total sales from this department(If 0, enter 0 or leave blank):"
+			message: "Enter total sales from this department (Optional - can be left blank. Format: 25.67):",
+			// Validate if entered input is in proper price format
+			validate: function(input) {
+				// Using regex pattern for matching
+				var check = input.match(/^-?\d*(\.\d{2})?$/);
+				if (check || input === "") {
+					return true;
+				} else {
+					return 'Incorrect sales price format - See format above';
+				}
+			}
 		}
 	]).then(function(department) {
-		if(department.totalSales === (null || "")) {
+		if(department.totalSales === "") {
 			var total_sales = 0.00;
 		}else {
 			var total_sales = department.totalSales;
@@ -116,7 +136,7 @@ function createNewDepartment() {
 				console.log(err);
 			}else {
 				console.log(`
-Department added
+Department '${department.name}' added to Bamazon.
 				`);
 			}
 			getSupervisorAction();

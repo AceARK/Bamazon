@@ -114,11 +114,27 @@ function addToInventory() {
 	inquirer.prompt([
 		{
 			name: "id",
-			message: "ID of item to add:" 
+			message: "ID of item to add:",
+			// Validate if entered input is a number and write appropriate error message
+			validate: function(input) {
+				if (isNaN(input)) {
+					return 'Enter the ID (a number) of the item to add';
+				} else {
+					return true;
+				}
+			}
 		},
 		{
 			name: "quantity",
-			message: "How much would you like to add?"
+			message: "How much would you like to add?",
+			// Validate if entered input is a number and write appropriate error message
+			validate: function(input) {
+				if (isNaN(input)) {
+					return 'Enter a number for quantity';
+				} else {
+					return true;
+				}
+			}
 		}
 	]).then(function(input) {
 		connection.query("SELECT stock_quantity FROM products WHERE item_id = ?", [input.id], function(err, data) {
@@ -164,11 +180,29 @@ function addNewProduct() {
 			},
 			{
 				name: "price",
-				message: "Enter it's selling price:"
+				message: "Enter it's selling price (example: 10.79, 0.50, 250):",
+				// Validate if entered input is in proper price format
+				validate: function(input) {
+					// Using regex pattern for matching
+					var check = input.match(/^-?\d*(\.\d{2})?$/);
+					if (check) {
+						return true;
+					} else {
+						return 'Incorrect price format - See examples above';
+					}
+				}
 			},
 			{
 				name: "quantity",
-				message: "Enter how much of it to stock in inventory:"
+				message: "Enter how much of it to stock in inventory:",
+				// Validate if entered input is a number 
+				validate: function(input) {
+					if (isNaN(input)) {
+						return 'Enter a number for quantity';
+					} else {
+						return true;
+					}
+				}
 			}
 		]).then(function(product) {
 			// Inserting data collected from user to products table
@@ -183,7 +217,7 @@ function addNewProduct() {
 				}else {
 					// Notify user
 					console.log(`
-New product added to Bamazon!
+New product '${product.name}' added to Bamazon!
 					`);
 				}
 				// Display menu again

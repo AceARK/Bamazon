@@ -53,10 +53,26 @@ function getUserChoice() {
 		{
 			name: "id",
 			message: "Enter the ID of the product you want to purchase:" 
+			// Validate if entered input is a number and write appropriate error message
+			validate: function(input) {
+				if (isNaN(input)) {
+					return 'Enter the ID (a number) of the product';
+				} else {
+					return true;
+				}
+			}
 		},
 		{
 			name: "quantity",
-			message: "Enter the quantity you want to purchase:"
+			message: "Enter the quantity you want to purchase:",
+			// Validate if entered input is a number and write appropriate error message
+			validate: function(input) {
+				if (isNaN(input)) {
+					return 'Enter a number for quantity';
+				} else {
+					return true;
+				}
+			}
 		}
 	]).then(function(choice) {
 		// If (select quantity from products where id = choice.id) quantity in db > choice.quantity => update in db (update products set quantity = dbquantity - userquantity where id = user.id)
