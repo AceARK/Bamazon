@@ -148,7 +148,7 @@ function addToInventory() {
 // Function to handle adding of new products
 function addNewProduct() {
 	// Getting a list of all the department names on Bamazon
-	connection.query("SELECT department_name FROM products GROUP BY department_name HAVING COUNT(*) >= 1", function(err, data) {
+	connection.query("SELECT department_name FROM departments", function(err, data) {
 		var departmentNames = data.map(item => item.department_name);
 		// Ask details of product to be added
 		inquirer.prompt([
