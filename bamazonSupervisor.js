@@ -146,7 +146,7 @@ function createNewDepartment() {
 			}else {
 				console.log(`
 -------------------------
-Department '${department.name}' added to Bamazon.
+Department - '${department.name}' - added to Bamazon.
 -------------------------`);
 			}
 			getSupervisorAction();

@@ -228,7 +228,7 @@ function addNewProduct() {
 					// Notify user
 					console.log(`
 -------------------------
-New product '${product.name}' added to Bamazon!
+New product - '${product.name}' - added to Bamazon!
 -------------------------`);
 				}
 				// Display menu again
