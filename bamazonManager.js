@@ -173,10 +173,12 @@ function addNewProduct() {
 				message: "Enter the name of the product:",
 				// Validate if entered input is in proper price format
 				validate: function(input) {
-					if (input !== "") {
+					if (input !== "" && !input.includes(";")) {
 						return true;
-					} else {
+					} else if(input === "") {
 						return "Required: Product name cannot be empty";
+					}else {
+						return "Invalid product name";
 					}
 				}
 			},

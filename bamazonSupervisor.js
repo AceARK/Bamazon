@@ -93,10 +93,12 @@ function createNewDepartment() {
 			name: "name",
 			message: "Enter the name of the department to be added:",
 			validate: function(input) {
-				if(input !== "") {
+				if(input !== "" && !input.includes(";")) {
 					return true;
-				}else {
+				}else if(input === ""){
 					return "Required: Department name cannot be empty"
+				}else {
+					return "Invalid department name"
 				}
 			}
 		},
