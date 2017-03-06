@@ -2,11 +2,11 @@
 Amazon-like MySQL database and Node.js program
 ------------------------------
 Three levels -
- * Customer View
- * Manager View
- * Supervisor View
+ 1. Customer View
+ 2. Manager View
+ 3. Supervisor View
 
-####Customer View:-
+###Customer View:-
 On command prompt or terminal, run: 
 
      node bamazonCustomer.js
@@ -15,7 +15,7 @@ This displays the list of products available and prompts user to purchase produc
 
 In case of Insufficient quantity, user is alerted, and if not, order goes through.
 
-####Manager View:-
+###Manager View:-
 On command prompt or terminal, run: 
 
      node bamazonManager.js
@@ -28,7 +28,7 @@ Prompts user to select -
 
 Contains validation to disable SQL injection and proper format of price/ quantity inputs (as does the previous level).
 
-####Supervisor View:-
+###Supervisor View:-
 On command prompt or terminal, run: 
 
      node bamazonSupervisor.js
@@ -42,4 +42,4 @@ This too sports validation to avoid incorrect inputs or SQL injection.
 
 -----------------
 
-Click here - https://youtu.be/41HfJc1fOzk - for a video walkthrough of this application.
+Click [here](https://youtu.be/41HfJc1fOzk) - for a video walk-through of this application.
