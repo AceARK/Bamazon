@@ -117,7 +117,7 @@ function addToInventory() {
 			message: "ID of item to add:",
 			// Validate if entered input is a number and write appropriate error message
 			validate: function(input) {
-				if (isNaN(input) || input === "") {
+				if (isNaN(input) || input === "" || input.includes(";")) {
 					return 'Enter the ID (a number) of the item to add';
 				} else {
 					return true;
@@ -129,7 +129,7 @@ function addToInventory() {
 			message: "How much would you like to add?",
 			// Validate if entered input is a number and write appropriate error message
 			validate: function(input) {
-				if (isNaN(input) || input === "") {
+				if (isNaN(input) || input === "" || input.includes(";")) {
 					return 'Enter a number for quantity';
 				} else {
 					return true;
@@ -137,6 +137,7 @@ function addToInventory() {
 			}
 		}
 	]).then(function(input) {
+		// Getting stock_quantity to be added to
 		connection.query("SELECT stock_quantity FROM products WHERE item_id = ?", [input.id], function(err, data) {
 			if(err) {
 				console.log(err);
@@ -176,6 +177,7 @@ function addNewProduct() {
 					if (input !== "" && !input.includes(";")) {
 						return true;
 					} else if(input === "") {
+						// Checking if product name is empty and displaying message to avoid that
 						return "Required: Product name cannot be empty";
 					}else {
 						return "Invalid product name";
@@ -195,7 +197,7 @@ function addNewProduct() {
 				validate: function(input) {
 					// Using regex pattern for matching price
 					var check = input.match(/^-?\d*(\.\d{2})?$/);
-					if (check && input!== "") {
+					if (check && input!== ""  && !input.includes(";")) {
 						return true;
 					} else {
 						return 'Incorrect price format - See examples above';
@@ -207,7 +209,7 @@ function addNewProduct() {
 				message: "Enter how much of it to stock in inventory:",
 				// Validate if entered input is a number 
 				validate: function(input) {
-					if (isNaN(input) || input === "") {
+					if (isNaN(input) || input === ""  || input.includes(";")) {
 						return 'Enter a number for quantity';
 					} else {
 						return true;
@@ -229,7 +231,8 @@ function addNewProduct() {
 					console.log(`
 -------------------------
 New product - '${product.name}' - added to Bamazon!
--------------------------`);
+-------------------------
+`);
 				}
 				// Display menu again
 				getManagerAction();

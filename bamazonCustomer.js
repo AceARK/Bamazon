@@ -55,7 +55,7 @@ function getUserChoice() {
 			message: "Enter the ID of the product you want to purchase:",
 			// Validate if entered input is a number and write appropriate error message
 			validate: function(input) {
-				if (isNaN(input) || input === "") {
+				if (isNaN(input) || input === ""  || input.includes(";")) {
 					return 'Enter the ID (a number) of the product';
 				} else {
 					return true;
@@ -67,7 +67,7 @@ function getUserChoice() {
 			message: "Enter the quantity you want to purchase:",
 			// Validate if entered input is a number and write appropriate error message
 			validate: function(input) {
-				if (isNaN(input) || input === "") {
+				if (isNaN(input) || input === "" || input.includes(";")) {
 					return 'Enter a number for quantity';
 				} else {
 					return true;

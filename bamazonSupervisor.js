@@ -88,14 +88,17 @@ function viewProductSalesByDepartment() {
 
 
 function createNewDepartment() {
+	// Get required data for new department addition
 	inquirer.prompt([
 		{
 			name: "name",
 			message: "Enter the name of the department to be added:",
+			// Validation to exclude sql queries (end in ';')
 			validate: function(input) {
 				if(input !== "" && !input.includes(";")) {
 					return true;
 				}else if(input === ""){
+					// Cannot add an empty department either, hence message for that
 					return "Required: Department name cannot be empty"
 				}else {
 					return "Invalid department name"
@@ -109,7 +112,7 @@ function createNewDepartment() {
 			validate: function(input) {
 				// Using regex pattern for matching cost format
 				var check = input.match(/^-?\d*(\.\d{2})?$/);
-				if (check && input !== "") {
+				if (check && input !== "" && !input.includes(";")) {
 					return true;
 				} else {
 					return 'Incorrect overhead cost format - See format above';
@@ -123,7 +126,7 @@ function createNewDepartment() {
 			validate: function(input) {
 				// Using regex pattern for matching price
 				var check = input.match(/^-?\d*(\.\d{2})?$/);
-				if (check && input === "") {
+				if (check && input === "" && !input.includes(";")) {
 					return true;
 				} else {
 					return 'Incorrect sales price format - See format above';
@@ -131,11 +134,13 @@ function createNewDepartment() {
 			}
 		}
 	]).then(function(department) {
+		// If no total sales entered (as it is 0 at the time of addition of department)
 		if(department.totalSales === "") {
 			var total_sales = 0.00;
 		}else {
 			var total_sales = department.totalSales;
 		}
+		// Add new department to table departments
 		connection.query("INSERT INTO departments SET ?", {
 			department_name: department.name,
 			over_head_costs: department.overHeadCosts,
@@ -144,11 +149,14 @@ function createNewDepartment() {
 			if(err) {
 				console.log(err);
 			}else {
+				// Notify supervisor
 				console.log(`
 -------------------------
 Department - '${department.name}' - added to Bamazon.
--------------------------`);
+-------------------------
+`);
 			}
+			// Display menu again
 			getSupervisorAction();
 		});
 	})
