@@ -22,6 +22,7 @@ Prompts user to select -
 - Add to inventory
 - Add new product
 
+Features -
 * Contains validation to disable SQL injection and proper format of price/ quantity inputs (as does the previous level).
 
 ### Supervisor View:-
@@ -31,6 +32,7 @@ Users can choose to:
 - View product sales by department
 - Create a new department
 
+Features -
 * Uses aliasing to name column total_profit generated on the fly, and change name of total_sales.
 * This too sports validation to avoid incorrect inputs or SQL injection.
 
