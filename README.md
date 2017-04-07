@@ -6,14 +6,14 @@ Three levels -
  2. Manager View
  3. Supervisor View
 
-###Customer View:-
+### Customer View:-
 Run `node bamazonCustomer.js` on command prompt or terminal. 
 
 This displays the list of products available and prompts user to purchase products using item_id and speciying quantity. MySQL queries work behind the scenes to fetch data and push data to the table. 
 
 In case of Insufficient quantity, user is alerted, and if not, order goes through.
 
-###Manager View:-
+### Manager View:-
 Run `node bamazonManager.js` on command prompt or terminal. 
 
 Prompts user to select -
@@ -24,7 +24,7 @@ Prompts user to select -
 
 Contains validation to disable SQL injection and proper format of price/ quantity inputs (as does the previous level).
 
-###Supervisor View:-
+### Supervisor View:-
 Run `node bamazonSupervisor.js` on command prompt or terminal. 
 
 Users can choose to:
@@ -36,4 +36,4 @@ This too sports validation to avoid incorrect inputs or SQL injection.
 
 -----------------
 
-####Click [here](https://youtu.be/Cg1Jx8lE3Ig) for a video walk-through of this application.####
+#### Click [here](https://youtu.be/Cg1Jx8lE3Ig) for a video walk-through of this application. ####
