@@ -1,7 +1,7 @@
 # Bamazon
 Amazon-like MySQL database and Node.js program
 ------------------------------
-Three levels -
+### Three levels -
  1. Customer View
  2. Manager View
  3. Supervisor View
@@ -22,7 +22,7 @@ Prompts user to select -
 - Add to inventory
 - Add new product
 
-Contains validation to disable SQL injection and proper format of price/ quantity inputs (as does the previous level).
+* Contains validation to disable SQL injection and proper format of price/ quantity inputs (as does the previous level).
 
 ### Supervisor View:-
 Run `node bamazonSupervisor.js` on command prompt or terminal. 
@@ -31,8 +31,8 @@ Users can choose to:
 - View product sales by department
 - Create a new department
 
-Uses aliasing to name column total_profit generated on the fly, and change name of total_sales.
-This too sports validation to avoid incorrect inputs or SQL injection.
+* Uses aliasing to name column total_profit generated on the fly, and change name of total_sales.
+* This too sports validation to avoid incorrect inputs or SQL injection.
 
 -----------------
 
